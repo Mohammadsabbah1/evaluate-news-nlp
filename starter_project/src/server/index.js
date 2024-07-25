@@ -1,33 +1,22 @@
-var path = require('path');
 const express = require('express');
-const bodyParser = require('body-parser');
+const path = require('path');
+const app = express();
+const port = 8080;
 const dotenv = require('dotenv');
 dotenv.config();
+app.use(express.static('dist'));
 
-const app = express();
-
-const cors = require('cors');
-
-app.use(cors());
-app.use(bodyParser.json());
-
-console.log(__dirname);
-
-// Variables for url and api key
-
-
-app.get('/', function (req, res) {
-    res.send("This is the server API page, you may access its services via the client app.");
+app.get('/', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../dist/index.html'));
 });
 
 
-// POST Route
-
-
-
-// Designates what port the app will listen to for incoming requests
-app.listen(8000, function () {
-    console.log('Example app listening on port 8000!');
+const aylien = require("aylien_textapi");
+const textapi = new aylien({
+  application_id: process.env.API_ID,
+  application_key: process.env.API_KEY
 });
 
-
+app.listen(port, () => {
+  console.log(`App listening on port ${port}`);
+});
